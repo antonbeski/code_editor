@@ -5,31 +5,32 @@
 
 // ── Starter code ──────────────────────────────────────────
 const STARTER_CODE = `# Welcome to Run01
-# Pure client-side Python sandbox running via Pyodide + WebAssembly
-# Press Run or Cmd/Ctrl + Enter to execute
+# Data science & finance packages are prebuilt and ready to use!
 
 import sys
+import numpy as np
+import pandas as pd
+import matplotlib
+import seaborn as sns
+import scipy
+import yfinance as yf
+import statsmodels
+import sklearn
+import plotly
 
-def fibonacci(n):
-    """Generate Fibonacci sequence up to n terms."""
-    a, b = 0, 1
-    sequence = []
-    for _ in range(n):
-        sequence.append(a)
-        a, b = b, a + b
-    return sequence
-
-# Run it
-terms = 12
-fib = fibonacci(terms)
-
-print(f"Fibonacci sequence ({terms} terms):")
-print(" -> ".join(str(x) for x in fib))
+print("Run01 Environment is Fully Loaded!")
+print(f"Python:       {sys.version.split()[0]}")
+print(f"NumPy:        {np.__version__}")
+print(f"Pandas:       {pd.__version__}")
+print(f"SciPy:        {scipy.__version__}")
+print(f"Scikit-Learn: {sklearn.__version__}")
+print(f"Statsmodels:  {statsmodels.__version__}")
+print(f"Matplotlib:   {matplotlib.__version__}")
+print(f"Seaborn:      {sns.__version__}")
+print(f"Plotly:       {plotly.__version__}")
+print(f"yfinance:     {yf.__version__}")
 print()
-
-# Python version
-print(f"Python {sys.version}")
-print("Running in WebAssembly via Pyodide")
+print("All compiler prebuilt modules are ready to use!")
 `;
 
 // ── State ─────────────────────────────────────────────────
@@ -130,19 +131,38 @@ require(['vs/editor/editor.main'], function () {
 
 // ── Pyodide init ──────────────────────────────────────────
 (async function initPyodide() {
-  setStatus('loading', 'Loading Pyodide…');
+  setStatus('loading', 'Initializing Pyodide core…');
   try {
     // Explicit indexURL to avoid loader resolution issues
     pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.1/full/' });
+    
+    setStatus('loading', 'Loading numpy, pandas, matplotlib, scipy, scikit-learn, statsmodels…');
+    await pyodide.loadPackage([
+      "numpy",
+      "pandas",
+      "matplotlib",
+      "scipy",
+      "scikit-learn",
+      "statsmodels"
+    ]);
+    
+    setStatus('loading', 'Installing seaborn, yfinance, plotly…');
+    await pyodide.loadPackage("micropip");
+    const micropip = pyodide.pyimport("micropip");
+    await micropip.install([
+      "seaborn",
+      "yfinance",
+      "plotly"
+    ]);
+
     setStatus('ready', 'Ready');
     btnRun.disabled = false;
     clearOutput();
     appendWelcome();
   } catch (err) {
-    setStatus('error', 'Failed to load Pyodide');
+    setStatus('error', 'Failed to initialize environment');
     const msg = err && err.stack ? err.stack : (err && err.message ? err.message : String(err));
-    appendToOutput(`Error loading Pyodide: ${msg}`, 'err');
-    // Also log to console for Vercel logs
+    appendToOutput(`Error loading prebuilt modules: ${msg}`, 'err');
     console.error('Pyodide load error:', err);
   }
 })();

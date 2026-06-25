@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify, request
+import json
 
 # Use __name__ so Flask can locate the templates/static folders correctly.
 app = Flask(__name__)
@@ -10,10 +11,6 @@ def index():
     return render_template("index.html")
 
 # ── Yahoo Finance server-side proxy ───────────────────────────────────────────
-# Pyodide runs inside the browser sandbox; direct HTTP requests to external
-# hosts like fc.yahoo.com are blocked by CORS policy. This endpoint fetches
-# stock data server-side (no CORS restrictions) and returns clean JSON to the
-# browser, which Pyodide can consume via pyodide.http.pyfetch("/api/yf/...").
 @app.route("/api/yf/<ticker>")
 def yf_proxy(ticker):
     try:
@@ -25,13 +22,55 @@ def yf_proxy(ticker):
         hist = t.history(period=period, interval=interval)
 
         if hist.empty:
-            return jsonify({"error": f"No price data found for '{ticker}'. "
-                                     f"Symbol may be delisted or invalid."}), 404
+            return jsonify({"error": f"No price data found for '{ticker}'."}), 404
 
-        # Convert DatetimeIndex to ISO strings so JSON serialisation works
         hist.index = hist.index.strftime("%Y-%m-%d")
         records = hist.reset_index().rename(columns={"index": "Date"}).to_dict(orient="records")
         return jsonify(records)
+
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 500
+
+# ── Piston code execution proxy (C++, C#, Rust) ──────────────────────────────
+# Routes compilation requests to the Piston API (https://emkc.org) which runs
+# code server-side. This avoids needing to install gcc/mono/rustc locally and
+# works perfectly on Vercel serverless.
+PISTON_URL = "https://emkc.org/api/v2/piston/execute"
+PISTON_LANGS = {
+    "cpp":    "c++",
+    "csharp": "csharp",
+    "rust":   "rust",
+}
+
+@app.route("/api/run", methods=["POST"])
+def run_code():
+    try:
+        from urllib.request import Request, urlopen
+
+        data = request.get_json(force=True)
+        lang_key = data.get("language", "")
+        piston_lang = PISTON_LANGS.get(lang_key)
+
+        if not piston_lang:
+            return jsonify({"error": f"Unsupported language: {lang_key}"}), 400
+
+        payload = json.dumps({
+            "language": piston_lang,
+            "version": "*",
+            "files": [{"content": data.get("code", "")}],
+        }).encode("utf-8")
+
+        req = Request(
+            PISTON_URL,
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+
+        with urlopen(req, timeout=30) as resp:
+            result = json.loads(resp.read().decode("utf-8"))
+
+        return jsonify(result)
 
     except Exception as exc:
         return jsonify({"error": str(exc)}), 500

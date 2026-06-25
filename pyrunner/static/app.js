@@ -136,7 +136,7 @@ require(['vs/editor/editor.main'], function () {
     // Explicit indexURL to avoid loader resolution issues
     pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.1/full/' });
     
-    setStatus('loading', 'Loading numpy, pandas, matplotlib, scipy, scikit-learn, statsmodels…');
+    setStatus('loading', 'Loading standard data libraries…');
     await pyodide.loadPackage([
       "numpy",
       "pandas",
@@ -146,14 +146,14 @@ require(['vs/editor/editor.main'], function () {
       "statsmodels"
     ]);
     
-    setStatus('loading', 'Installing seaborn, yfinance, plotly…');
+    setStatus('loading', 'Installing community packages (seaborn, yfinance, plotly)…');
     await pyodide.loadPackage("micropip");
     const micropip = pyodide.pyimport("micropip");
-    await micropip.install([
-      "seaborn",
-      "yfinance",
-      "plotly"
-    ]);
+    
+    const pkgs = ["seaborn", "yfinance==0.2.37", "plotly"];
+    for (const pkg of pkgs) {
+      await micropip.install(pkg, { keep_going: true });
+    }
 
     setStatus('ready', 'Ready');
     btnRun.disabled = false;

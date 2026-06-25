@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Environment Variables
+.env
+.env.local
+.env.production
+.env.development
+.env.staging
+
+# System / OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Customizations / Temporary Files
+.agents/
+temp_skill/

@@ -4,9 +4,9 @@
    ============================================================ */
 
 // ── Starter code ──────────────────────────────────────────
-const STARTER_CODE = `# Welcome to Run01 🐍
-# Python runs entirely in your browser via Pyodide + WebAssembly
-# Press ▶ Run or Cmd/Ctrl + Enter to execute
+const STARTER_CODE = `# Welcome to Run01
+# Pure client-side Python sandbox running via Pyodide + WebAssembly
+# Press Run or Cmd/Ctrl + Enter to execute
 
 import sys
 
@@ -24,12 +24,12 @@ terms = 12
 fib = fibonacci(terms)
 
 print(f"Fibonacci sequence ({terms} terms):")
-print(" → ".join(str(x) for x in fib))
+print(" -> ".join(str(x) for x in fib))
 print()
 
 # Python version
 print(f"Python {sys.version}")
-print("Running in WebAssembly via Pyodide 🚀")
+print("Running in WebAssembly via Pyodide")
 `;
 
 // ── State ─────────────────────────────────────────────────
@@ -57,44 +57,44 @@ function setStatus(state, label) {
 // ── Monaco init ───────────────────────────────────────────
 require(['vs/editor/editor.main'], function () {
 
-  // Custom dark theme matching our palette
-  monaco.editor.defineTheme('pyrunner-dark', {
+  // Custom premium monochrome theme
+  monaco.editor.defineTheme('run01-monochrome', {
     base: 'vs-dark',
     inherit: true,
     rules: [
-      { token: 'comment',       foreground: '3D4163', fontStyle: 'italic' },
-      { token: 'keyword',       foreground: '7C5CFC', fontStyle: 'bold' },
-      { token: 'string',        foreground: '4ADE80' },
-      { token: 'number',        foreground: 'FBBF24' },
-      { token: 'identifier',    foreground: 'E8E6F0' },
-      { token: 'type.identifier', foreground: '38BDF8' },
-      { token: 'delimiter',     foreground: '6B7094' },
-      { token: 'operator',      foreground: 'F472B6' },
+      { token: 'comment',         foreground: '5C5C5C', fontStyle: 'italic' },
+      { token: 'keyword',         foreground: 'FFFFFF', fontStyle: 'bold' },
+      { token: 'string',          foreground: 'A3A3A3' },
+      { token: 'number',          foreground: 'E5E5E5' },
+      { token: 'identifier',      foreground: 'D4D4D4' },
+      { token: 'type.identifier',  foreground: 'FFFFFF', fontStyle: 'bold' },
+      { token: 'delimiter',       foreground: '737373' },
+      { token: 'operator',        foreground: 'FFFFFF' },
     ],
     colors: {
-      'editor.background':           '#0D0F14',
-      'editor.foreground':           '#E8E6F0',
-      'editor.lineHighlightBackground': '#1A1D27',
-      'editor.selectionBackground':  '#7C5CFC33',
-      'editor.inactiveSelectionBackground': '#7C5CFC1A',
-      'editorLineNumber.foreground': '#3D4163',
-      'editorLineNumber.activeForeground': '#6B7094',
-      'editorCursor.foreground':     '#7C5CFC',
-      'editorIndentGuide.background':'#2A2D3E',
-      'editorIndentGuide.activeBackground': '#3D4163',
-      'editorWidget.background':     '#1A1D27',
-      'editorWidget.border':         '#2A2D3E',
-      'input.background':            '#0D0F14',
-      'input.foreground':            '#E8E6F0',
-      'scrollbarSlider.background':  '#2A2D3E88',
-      'scrollbarSlider.hoverBackground': '#2A2D3Ecc',
+      'editor.background':           '#00000000',
+      'editor.foreground':           '#D4D4D4',
+      'editor.lineHighlightBackground': '#ffffff0a',
+      'editor.selectionBackground':  '#ffffff20',
+      'editor.inactiveSelectionBackground': '#ffffff10',
+      'editorLineNumber.foreground': '#525252',
+      'editorLineNumber.activeForeground': '#A3A3A3',
+      'editorCursor.foreground':     '#FFFFFF',
+      'editorIndentGuide.background':'#262626',
+      'editorIndentGuide.activeBackground': '#404040',
+      'editorWidget.background':     '#121212',
+      'editorWidget.border':         '#262626',
+      'input.background':            '#050505',
+      'input.foreground':            '#F5F5F7',
+      'scrollbarSlider.background':  '#ffffff10',
+      'scrollbarSlider.hoverBackground': '#ffffff20',
     }
   });
 
   monacoEditor = monaco.editor.create(document.getElementById('editor'), {
     value: STARTER_CODE,
     language: 'python',
-    theme: 'pyrunner-dark',
+    theme: 'run01-monochrome',
     fontSize: 13.5,
     fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
     fontLigatures: true,
@@ -261,7 +261,7 @@ function appendWelcome() {
     <div class="output-welcome">
       <div class="welcome-prompt">
         <span class="prompt-caret">❯</span>
-        Run01 ready — press <strong style="color:var(--violet)">▶ Run</strong> or <kbd style="font-family:var(--font-mono);font-size:11px;background:var(--surface2);padding:1px 5px;border-radius:4px">⌘↵</kbd> to execute the code.
+        Run01 ready - press <strong style="color:var(--white)">▶ Run</strong> or <kbd style="font-family:var(--font-mono);font-size:11px;background:var(--glass-bg-hover);padding:1px 5px;border-radius:4px;border:1px solid var(--glass-border)">⌘↵</kbd> to execute the code.
       </div>
     </div>
   `;

@@ -1,72 +1,59 @@
-# PyRunner 🐍
+# Run01 ⬡
 
-A browser-based Python IDE — edit and run Python instantly, no server execution, no setup. Built with Flask, Monaco Editor, and Pyodide (WebAssembly).
+A premium, browser-based Python sandbox — edit and run Python instantly with zero server execution and zero setup. Built with Flask, Monaco Editor, and Pyodide (WebAssembly).
 
-## Stack
+This repository features an ultra-premium, minimalist **Monochrome Glassmorphic** theme.
+
+## Architecture & Stack
 
 | Layer | Technology |
 |-------|------------|
-| Server | Flask (serves one page only) |
-| Editor | Monaco Editor (from CDN) |
-| Runtime | Pyodide — Python in WebAssembly |
-| Hosting | Vercel (auto-deploy from GitHub) |
-
-## Project Structure
-
-```
-pyrunner/
-├── app.py              # Flask entrypoint
-├── requirements.txt    # Flask dependency
-├── vercel.json         # Vercel routing config
-├── templates/
-│   └── index.html      # Single app page
-└── static/
-    ├── app.js          # Monaco + Pyodide logic
-    └── style.css       # UI theme
-```
-
-## Run Locally
-
-```bash
-pip install -r requirements.txt
-python app.py
-# → open http://localhost:5000
-```
-
-## Deploy to Vercel
-
-1. Push this repo to GitHub
-2. Go to [vercel.com](https://vercel.com) → **Add New Project**
-3. Import your GitHub repository
-4. Vercel auto-detects Flask via `app.py` — click **Deploy**
-5. Done. Every `git push` triggers a new deployment.
-
-## How it works
-
-- Flask only serves `index.html` and static files — it never executes Python code
-- Monaco Editor loads from CDN and provides the code editing experience
-- Pyodide loads from CDN and runs Python entirely in the browser via WebAssembly
-- Clicking **Run** passes code from Monaco to Pyodide; output appears instantly
-
-## Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| `Cmd/Ctrl + Enter` | Run code |
+| **Server** | Flask (WSGI serving static templates) |
+| **Editor** | Monaco Editor (fully customized monochrome theme with transparent integration) |
+| **Runtime** | Pyodide — Python 3.x compiled to WebAssembly (running 100% client-side) |
+| **Hosting** | Vercel (pre-configured serverless WSGI routing) |
 
 ## Features
 
-- ✅ Syntax highlighting (Python, Monaco)
-- ✅ Custom dark theme (violet/cyan accent)
-- ✅ Draggable split pane (editor / output)
-- ✅ Run history with timing per execution
-- ✅ Error highlighting in output
-- ✅ Keyboard shortcut to run
-- ✅ Reset to starter code
+- **Typographic Branding**: High-end minimalist branding with a custom badge and no heavy visual logos.
+- **Glassmorphic Design**: Floating frosted-glass containers featuring deep-layered shadows and custom background blur effects.
+- **Strict Monochrome Theme**: A design built entirely around black, white, and varying shades of gray (grayscale syntax highlighting and monochrome status markers).
+- **Draggable Splitting**: Fluent resize handle separating the editor and console output.
+- **Run History**: Live timing metrics and status reporting for each execution.
+- **WASM execution**: Runs Python in-browser via Pyodide. Supports standard input/output.
 
-## Limitations (intentional MVP scope)
+## Project Structure
 
-- No file save/load — refresh resets everything
-- No package install UI (Pyodide includes many stdlib packages)
-- No authentication or user accounts
-- No backend code execution
+```text
+code_editor/
+├── api/
+│   └── index.py            # Vercel serverless entrypoint
+├── pyrunner/
+│   ├── app.py              # Flask app initialization
+│   ├── requirements.txt    # Flask dependency
+│   ├── static/
+│   │   ├── app.js          # Monaco theme & Pyodide execution script
+│   │   └── style.css       # Glassmorphic Monochrome stylesheet
+│   └── templates/
+│       └── index.html      # Float layout page template
+├── vercel.json             # Routing configs
+└── requirements.txt        # Root requirements
+```
+
+## Running Locally
+
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Run the application:
+   ```bash
+   python pyrunner/app.py
+   ```
+3. Open [http://localhost:5000](http://localhost:5000) in your web browser.
+
+## Deploying to Vercel
+
+1. Push this repository to GitHub.
+2. Link your repository in [Vercel](https://vercel.com).
+3. The platform will automatically deploy your app using the configuration in `vercel.json` and `api/index.py`.

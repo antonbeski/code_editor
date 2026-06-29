@@ -72,10 +72,10 @@ The server layer (Flask / Vercel) is intentionally thin: it serves static assets
 │                                                                      │
 │  ┌─────────────────────┐    ┌──────────────────────────────────────┐ │
 │  │   Monaco Editor     │    │          Output Console              │ │
-│  │  (AMD, CDN-loaded)  │    │  ┌─────────┐ ┌────────┐ ┌────────┐  │ │
-│  │                     │    │  │ stdout  │ │  PNG   │ │Plotly  │  │ │
-│  │  Python / C++ / C#  │    │  │ stream  │ │ chart  │ │ chart  │  │ │
-│  │  / Rust source      │    │  └─────────┘ └────────┘ └────────┘  │ │
+│  │  (AMD, CDN-loaded)  │    │  ┌─────────┐ ┌────────┐ ┌────────┐   │ │
+│  │                     │    │  │ stdout  │ │  PNG   │ │Plotly  │   │ │
+│  │  Python / C++ / C#  │    │  │ stream  │ │ chart  │ │ chart  │   │ │
+│  │  / Rust source      │    │  └─────────┘ └────────┘ └────────┘   │ │
 │  └──────────┬──────────┘    └──────────────────────────────────────┘ │
 │             │ getValue()                         ▲                   │
 │             ▼                                    │                   │
@@ -93,17 +93,17 @@ The server layer (Flask / Vercel) is intentionally thin: it serves static assets
 │  │  matplotlib · statsmodels · seaborn      │                        │
 │  │  plotly                                  │                        │
 │  └────────────┬─────────────────────────────┘                        │
-│               │ pyfetch("/api/yf/...")                                │
-│               │ (yfinance CORS bypass)                                │
+│               │ pyfetch("/api/yf/...")                               │
+│               │ (yfinance CORS bypass)                               │
 └───────────────┼──────────────────────────────────────────────────────┘
                 │ HTTP
 ┌───────────────┼──────────────────────────────────────────────────────┐
 │               ▼            FLASK / VERCEL                            │
 │  ┌─────────────────────────────────────────────────────────────────┐ │
-│  │  GET  /api/yf/<ticker>?period=&interval=   →  yfinance (PyPI)  │ │
-│  │  POST /api/run  {language, code}           →  Piston API       │ │
-│  │  GET  /sw.js                               →  Service Worker   │ │
-│  │  GET  /                                    →  index.html       │ │
+│  │  GET  /api/yf/<ticker>?period=&interval=   →  yfinance (PyPI)   │ │
+│  │  POST /api/run  {language, code}           →  Piston API        │ │
+│  │  GET  /sw.js                               →  Service Worker    │ │
+│  │  GET  /                                    →  index.html        │ │
 │  └─────────────────────────────────────────────────────────────────┘ │
 └──────────────────────────────────────────────────────────────────────┘
                 │
